@@ -1,13 +1,10 @@
 pipeline {
     agent any
     stages {
-        stage('Bulid') {
+        stage('Upload to AWS') {
             steps {
-                sh 'echo "Hello World"'
-                sh '''
-                  echo "Multiline shell steps works too"
-                  ls -lah
-                '''
+                withAWS(region:'us-west-1',credentials:'aws-static') {
+                    s3Upload(pathStyleAccessEnabled:true, payloadSigningEnabled: true, file:'index.html', bucket:'udacityprojectjenkins')
             }
         }
     }
